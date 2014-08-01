@@ -57,13 +57,16 @@ Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
 		this.width = args.width || elementWidth || this.graph.width * this.berthRate;
 		this.height = args.height || elementHeight || this.graph.height;
 
+		// increase height so it doesn't cut off bottom labels
+		this.height += 10;
+
 		this.vis
 			.attr('width', this.width)
 			.attr('height', this.height * (1 + this.berthRate));
 
 		var berth = this.height * this.berthRate;
 
-		if (this.orientation == 'left') {
+		if (this.orientation == 'left' || this.orientation == 'right') {
 			this.element.style.top = -1 * berth + 'px';
 		}
 	},
@@ -86,9 +89,13 @@ Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
 		axis.tickFormat(this.tickFormat);
 		if (this.tickValues) axis.tickValues(this.tickValues);
 
+		var berth = this.height * this.berthRate;
+		var transform;
 		if (this.orientation == 'left') {
-			var berth = this.height * this.berthRate;
-			var transform = 'translate(' + this.width + ', ' + berth + ')';
+			transform = 'translate(' + this.width + ', ' + berth + ')';
+		}
+		else {
+			transform = 'translate(0, ' + berth + ')';
 		}
 
 		if (this.element) {
