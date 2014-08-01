@@ -14,7 +14,7 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 		return Rickshaw.extend( $super(), {
 			unstack: true,
 			fill: false,
-			stroke: true 
+			stroke: true
 		} );
 	},
 
@@ -41,7 +41,7 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 				.map( function(s) { return s.stack });
 
 			if (!data.length) return;
-			
+
 			var domain = null;
 			if (group.renderer && group.renderer.domain) {
 				domain = group.renderer.domain(data);
@@ -84,6 +84,8 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 				var defaults = [ this.defaults(), renderer.defaults(), this.config, this.graph ];
 				defaults.forEach(function(d) { Rickshaw.extend(config, d) });
 
+				if (config.stack != null) config.unstack = !config.stack;
+
 				renderer.configure(config);
 
 				renderGroups[series.renderer] = {
@@ -92,7 +94,7 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 					vis: d3.select(vis)
 				};
 			}
-				
+
 			renderGroups[series.renderer].series.push(series);
 
 		}, this);
