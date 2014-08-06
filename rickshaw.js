@@ -1411,6 +1411,7 @@ Rickshaw.Graph.Axis.Time = function(args) {
 	this.elements = [];
 	this.ticksTreatment = args.ticksTreatment || 'plain';
 	this.fixedTimeUnit = args.timeUnit;
+	this.labelAlign = args.labelAlign || 'right';
 
 	var time = args.timeFixture || new Rickshaw.Fixtures.Time();
 
@@ -1464,9 +1465,9 @@ Rickshaw.Graph.Axis.Time = function(args) {
 		var offsets = this.tickOffsets();
 
 		offsets.forEach( function(o) {
-			
+
 			if (self.graph.x(o.value) > self.graph.x.range()[1]) return;
-	
+
 			var element = document.createElement('div');
 			element.style.left = self.graph.x(o.value) + 'px';
 			element.classList.add('x_tick');
@@ -1479,6 +1480,26 @@ Rickshaw.Graph.Axis.Time = function(args) {
 
 			self.graph.element.appendChild(element);
 			self.elements.push(element);
+
+			if (self.labelAlign == 'center' && title.offsetWidth) {
+				var titleWidth = title.offsetWidth;
+				title.style.marginLeft = '-' + Math.round(titleWidth / 2) + 'px';
+
+				var graphElement = element.offsetParent;
+				var left = element.offsetLeft + title.offsetLeft;
+				var right = left + titleWidth;
+				var diff = 0;
+
+				// adjust margin so we go extend beyond bounds of graph container
+				if (left < 0) {
+					diff = Math.abs(left);
+					title.style.marginLeft = '-' + (Math.round(titleWidth / 2) - diff) + 'px';
+				}
+				else if (right > graphElement.offsetWidth) {
+					diff = graphElement.offsetWidth - right;
+					title.style.marginLeft = '-' + (Math.round(titleWidth / 2) - diff) + 'px';
+				}
+			}
 
 		} );
 	};
